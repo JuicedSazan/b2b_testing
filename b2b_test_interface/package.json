@@ -1,7 +1,0 @@
-{
-  "name": "b2b_test_interface",
-  "version": "1.0.0",
-  "dependencies": {
-    "node-fetch": "^2.6.7"
-  }
-}
