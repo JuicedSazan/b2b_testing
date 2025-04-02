@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сайт с четырьмя колонками</title>
+    <style>
+        /* Общие стили */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+
+        /* Шапка с кнопками */
+        .header {
+            width: 90%;
+            max-width: 1600px;
+            margin-bottom: 20px;
+        }
+        .buttons-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .button-group-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            min-width: 250px;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 14px;
+            text-align: center;
+            transition: background-color 0.3s;
+            border: none;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .btn-sample {
+            background-color: #28a745;
+        }
+        .btn-sample:hover {
+            background-color: #218838;
+        }
+        .btn-submit {
+            background-color: #6c757d;
+        }
+        .btn-submit:hover {
+            background-color: #5a6268;
+        }
+        .section-title {
+            font-size: 16px;
+            color: #555;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* Основной контейнер */
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr 1.5fr 2fr;
+            width: 90%;
+            max-width: 1600px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            gap: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .container.no-images {
+            grid-template-columns: 0 2fr 1.5fr 2fr;
+        }
+
+        /* Колонки */
+        .column {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .panel {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .panel-title {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        /* Левая колонка (изображения) */
+        .image-panel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+        }
+        .main-image-container {
+            position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+        .main-image {
+            max-width: 100%;
+            height: auto;
+            max-height: 300px;
+            border-radius: 8px;
+            object-fit: contain;
+        }
+        .thumbnails {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .thumbnail {
+            width: 60px;
+            height: 60px;
+            border-radius: 4px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            object-fit: cover;
+        }
+        .thumbnail.active {
+            border-color: #007bff;
+        }
+        .sample-container {
+            margin-top: auto;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+        .nav-buttons {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 10px;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+        .nav-btn {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: all;
+        }
+        .nav-btn:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        /* Центральная колонка (запрос) */
+        .query-panel {
+            display: flex;
+            flex-direction: column;
+        }
+        .query-box {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        .query-text {
+            width: 100%;
+            height: 100%;
+            border: none;
+            resize: none;
+            font-size: 18px;
+            text-align: center;
+            color: #333;
+            background-color: transparent;
+            min-height: 150px;
+        }
+
+        /* Правая колонка (ссылки) */
+        .links-panel {
+            display: flex;
+            flex-direction: column;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .divider {
+            border: none;
+            border-top: 1px solid #ddd;
+            margin: 10px 0;
+        }
+
+        /* Колонка с подсказкой */
+        .hint-panel {
+            display: flex;
+            flex-direction: column;
+        }
+        .hint-box {
+            flex-grow: 1;
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background-color: white;
+            font-size: 14px;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            overflow-y: auto;
+            min-height: 200px;
+        }
+
+        /* Футер */
+        .footer {
+            width: 90%;
+            max-width: 1600px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 1200px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .container.no-images {
+                grid-template-columns: 1fr;
+            }
+            .buttons-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .button-group-container {
+                min-width: 100%;
+            }
+            .nav-buttons {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Шапка с кнопками -->
+    <div class="header">
+        <div class="buttons-container">
+            <div class="button-group-container">
+                <div class="section-title">Где искать:</div>
+                <div class="button-group">
+                    <a href="https://www.alibaba.com" class="btn" target="_blank">Alibaba</a>
+                    <a href="https://en.yiwugo.com" class="btn" target="_blank">YiwuGo</a>
+                    <a href="https://www.1688.com" class="btn" target="_blank">1688</a>
+                </div>
+            </div>
+            <div class="button-group-container">
+                <div class="section-title">Поиск запроса в поисковиках:</div>
+                <div class="button-group">
+                    <a id="google-search-btn" href="#" class="btn" target="_blank">Google</a>
+                    <a id="yandex-search-btn" href="#" class="btn" target="_blank">Yandex</a>
+                </div>
+            </div>
+            <div class="button-group-container">
+                <div class="section-title">Поиск запроса по картинкам:</div>
+                <div class="button-group">
+                    <a id="google-images-btn" href="#" class="btn" target="_blank">Google Images</a>
+                    <a id="yandex-images-btn" href="#" class="btn" target="_blank">Yandex.Images</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Основной контейнер -->
+    <div class="container">
+        <!-- Левая колонка (изображения) -->
+        <div class="column">
+            <div class="panel image-panel" id="image-container">
+                <div class="main-image-container">
+                    <img id="main-image" class="main-image" src="https://via.placeholder.com/300" alt="Изображение товара">
+                    <div class="nav-buttons" id="nav-buttons">
+                        <button id="prev-image-btn" class="nav-btn">‹</button>
+                        <button id="next-image-btn" class="nav-btn">›</button>
+                    </div>
+                </div>
+                <div class="thumbnails" id="thumbnails"></div>
+                <div class="sample-container" id="sample-link"></div>
+            </div>
+        </div>
+        
+        <!-- Центральная колонка (запрос) -->
+        <div class="column">
+            <div class="panel query-panel">
+                <div class="panel-title">Запрос:</div>
+                <div class="query-box">
+                    <textarea id="query-text" class="query-text" readonly>Выберите товар из списка</textarea>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Правая колонка (ссылки) -->
+        <div class="column">
+            <div class="panel links-panel">
+                <div class="panel-title">Найденные ссылки:</div>
+                <div class="input-group">
+                    <input type="text" class="input-field" placeholder="Вставьте найденную ссылку">
+                    <input type="text" class="input-field" placeholder="Поясните свой ответ">
+                </div>
+                <div class="divider"></div>
+                <div class="input-group">
+                    <input type="text" class="input-field" placeholder="Вставьте найденную ссылку">
+                    <input type="text" class="input-field" placeholder="Поясните свой ответ">
+                </div>
+                <div class="divider"></div>
+                <div class="input-group">
+                    <input type="text" class="input-field" placeholder="Вставьте найденную ссылку">
+                    <input type="text" class="input-field" placeholder="Поясните свой ответ">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Колонка с подсказкой -->
+        <div class="column">
+            <div class="panel hint-panel">
+                <div class="panel-title">Подсказка от нейросети:</div>
+                <div class="hint-box" id="hint-box"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Футер -->
+    <div class="footer">
+        <div class="checkbox-container">
+            <input type="checkbox" id="no-item-checkbox">
+            <label for="no-item-checkbox">На сайтах нет такого товара</label>
+        </div>
+        <button id="next-item-btn" class="btn btn-submit">Отправить</button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Элементы DOM
+            const queryText = document.getElementById("query-text");
+            const mainImage = document.getElementById("main-image");
+            const thumbnailsContainer = document.getElementById("thumbnails");
+            const sampleLinkContainer = document.getElementById("sample-link");
+            const nextItemBtn = document.getElementById("next-item-btn");
+            const hintBox = document.getElementById("hint-box");
+            const imageContainer = document.getElementById("image-container");
+            const container = document.querySelector(".container");
+            const prevImageBtn = document.getElementById("prev-image-btn");
+            const nextImageBtn = document.getElementById("next-image-btn");
+            const navButtons = document.getElementById("nav-buttons");
+            
+            // Кнопки поиска
+            const googleSearchBtn = document.getElementById("google-search-btn");
+            const yandexSearchBtn = document.getElementById("yandex-search-btn");
+            const googleImagesBtn = document.getElementById("google-images-btn");
+            const yandexImagesBtn = document.getElementById("yandex-images-btn");
+
+            // Данные товаров
+            const items = [
+                {
+                    text: "Бур по бетону SDS-plus 10x160 мм",
+                    images: [
+                        "https://cdn.vseinstrumenti.ru/images/goods/rashodnye-materialy-i-osnastka/rashodnye-materialy-dlya-instrumenta/722360/1200x800/52027871.jpg",
+                        "https://user51928.clients-cdnnow.ru/upload/iblock/95e/8taxv9ebvjdgv5a02mlc7be115xk5ncd/bur_po_betonu_sds-plus_forward.jpg",
+                        "https://famarket.ru/UserFiles/Image/img39265_22369_big.jpg"
+                    ],
+                    sampleLinks: ["https://www.vseinstrumenti.ru/product/bur-po-betonu-10h160-mm-sds-plus-722360/"]
+                },
+                {
+                    text: "Моп для швабры с креплением типа клик",
+                    images: [],
+                    sampleLinks: []
+                },
+                {
+                    text: "Болт 22х15",
+                    images: [
+                        "https://boatlab.pro/upload/iblock/012/r2hipd0a6qhg6d0gwtxpparrxgcu3n5n.jpg"
+                    ],
+                    sampleLinks: [
+                        "https://kamarik.ru/catalog/avto-zapchasti/maz/bolt-kolesa-evro-maz-zad-m-22h15-L-105mm-cc267c9b.html"
+                    ]
+                },
+                {
+                    text: "Сверло с коническим хвостиком",
+                    images: [
+                        "https://cdn.vseinstrumenti.ru/images/goods/rashodnye-materialy-i-osnastka/prisposobleniya-i-osnastka-dlya-stankov/1746097/1000x1000/53282099.jpg"
+                    ],
+                    sampleLinks: []
+                },
+                {
+                    text: "Бур по бетону 8х110 мм",
+                    images: [
+                        "https://cdn.vseinstrumenti.ru/images/goods/rashodnye-materialy-i-osnastka/rashodnye-materialy-dlya-instrumenta/722360/1200x800/52027871.jpg",
+                        "https://famarket.ru/UserFiles/Image/img39265_22369_big.jpg",
+                        "https://user51928.clients-cdnnow.ru/upload/iblock/95e/8taxv9ebvjdgv5a02mlc7be115xk5ncd/bur_po_betonu_sds-plus_forward.jpg"
+                    ],
+                    sampleLinks: ["https://www.vseinstrumenti.ru/product/bur-po-betonu-8h110-mm-sds-spets-0210004-722360/"]
+                }
+            ];
+
+            let currentIndex = 0;
+            let currentImageIndex = 0;
+
+            // Функция для обновления контента
+            function updateContent() {
+                const currentItem = items[currentIndex];
+                queryText.value = currentItem.text;
+                
+                // Очистка предыдущих данных
+                thumbnailsContainer.innerHTML = "";
+                sampleLinkContainer.innerHTML = "";
+
+                // Обновление изображений
+                if (currentItem.images && currentItem.images.length > 0) {
+                    mainImage.src = currentItem.images[currentImageIndex];
+                    imageContainer.classList.remove("hidden");
+                    container.classList.remove("no-images");
+
+                    // Создание превью изображений
+                    currentItem.images.forEach((image, index) => {
+                        const thumbnail = document.createElement("img");
+                        thumbnail.src = image;
+                        thumbnail.alt = `Превью ${index + 1}`;
+                        thumbnail.className = "thumbnail";
+                        if (index === currentImageIndex) {
+                            thumbnail.classList.add("active");
+                        }
+                        thumbnail.addEventListener("click", () => {
+                            currentImageIndex = index;
+                            updateImages();
+                        });
+                        thumbnailsContainer.appendChild(thumbnail);
+                    });
+
+                    // Показываем кнопки навигации если изображений больше 1
+                    if (currentItem.images.length > 1) {
+                        navButtons.style.display = "flex";
+                    } else {
+                        navButtons.style.display = "none";
+                    }
+                } else {
+                    imageContainer.classList.add("hidden");
+                    container.classList.add("no-images");
+                    navButtons.style.display = "none";
+                }
+
+                // Обновление ссылок на образцы товара
+                if (currentItem.sampleLinks && currentItem.sampleLinks.length > 0) {
+                    const sampleButton = document.createElement("a");
+                    sampleButton.href = currentItem.sampleLinks[0];
+                    sampleButton.className = "btn btn-sample";
+                    sampleButton.target = "_blank";
+                    sampleButton.textContent = "Образец товара";
+                    sampleLinkContainer.appendChild(sampleButton);
+                }
+
+                // Получение подсказки от нейросети
+                fetchHint(currentItem.text);
+            }
+
+            // Функция только для обновления изображений
+            function updateImages() {
+                const currentItem = items[currentIndex];
+                mainImage.src = currentItem.images[currentImageIndex];
+                
+                // Обновляем активную миниатюру
+                const thumbnails = thumbnailsContainer.querySelectorAll(".thumbnail");
+                thumbnails.forEach((thumb, index) => {
+                    if (index === currentImageIndex) {
+                        thumb.classList.add("active");
+                    } else {
+                        thumb.classList.remove("active");
+                    }
+                });
+            }
+
+            // Улучшенная функция получения подсказки
+            async function fetchHint(query) {
+                hintBox.textContent = "⌛ Загружаю подсказку...";
+                
+                try {
+                    const response = await fetch("/.netlify/functions/yandex-gpt", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ query })
+                    });
+
+                    const data = await response.json();
+                    
+                    if (!response.ok) {
+                        throw new Error(data.error || "Ошибка сервера");
+                    }
+
+                    hintBox.textContent = data.response || "Не удалось получить подсказку";
+                } catch (error) {
+                    console.error("Ошибка:", error);
+                    hintBox.textContent = `❌ Ошибка: ${error.message}\n\nПроверьте:\n1. Срок действия IAM-токена\n2. Логи Netlify Function`;
+                }
+            }
+
+            // Обработчики кнопок навигации по изображениям
+            prevImageBtn.addEventListener("click", (e) => {
+                e.preventDefault();
+                const currentItem = items[currentIndex];
+                if (currentItem.images && currentItem.images.length > 1) {
+                    currentImageIndex = (currentImageIndex - 1 + currentItem.images.length) % currentItem.images.length;
+                    updateImages();
+                }
+            });
+
+            nextImageBtn.addEventListener("click", (e) => {
+                e.preventDefault();
+                const currentItem = items[currentIndex];
+                if (currentItem.images && currentItem.images.length > 1) {
+                    currentImageIndex = (currentImageIndex + 1) % currentItem.images.length;
+                    updateImages();
+                }
+            });
+
+            // Обработчик кнопки "Отправить"
+            nextItemBtn.addEventListener("click", (e) => {
+                e.preventDefault();
+                currentIndex = (currentIndex + 1) % items.length;
+                currentImageIndex = 0;
+                updateContent();
+            });
+
+            // Настройка кнопок поиска
+            function setupSearchButtons() {
+                function getQuery() {
+                    return queryText.value.trim();
+                }
+
+                function createHandler(baseUrl, paramName, isImages = false) {
+                    return function(e) {
+                        e.preventDefault();
+                        const query = getQuery();
+                        if (query) {
+                            const url = isImages 
+                                ? `${baseUrl}search?tbm=isch&q=${encodeURIComponent(query)}`
+                                : `${baseUrl}search?${paramName}=${encodeURIComponent(query)}`;
+                            window.open(url, "_blank");
+                        }
+                    };
+                }
+
+                googleSearchBtn.addEventListener("click", createHandler("https://www.google.com/", "q"));
+                yandexSearchBtn.addEventListener("click", createHandler("https://yandex.ru/", "text"));
+                googleImagesBtn.addEventListener("click", createHandler("https://www.google.com/", "q", true));
+                yandexImagesBtn.addEventListener("click", createHandler("https://yandex.ru/images/", "text"));
+            }
+
+            // Инициализация
+            updateContent();
+            setupSearchButtons();
+        });
+    </script>
+</body>
+</html>
